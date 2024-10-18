@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FORM</title>
+  <style>
+    input[type=text],
+    input[type=number],
+    select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type=text]:focus,
+    input[type=number]:focus {
+      width: 100%;
+    }
+
+    button[type=submit] {
+      width: 100%;
+      background-color: #bd9730;
+      color: rgb(216, 226, 226);
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+      background-color: #4645a0;
+    }
+
+    div {
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 40px;
+      width: 50%;
+    }
+
+    #container1 {
+      display: inline-flex;
+      justify-content: center;
+    }
+
+    .error {
+      color: red;
+    }
+   
+    .success {
+      color: green;
+    }
+  </style>
+</head>
+<body>
+  <div id="container1">
+    <div>
+      <form id="myForm">
+        <label for="First">First Name</label><br>
+        <input type="text" placeholder="Enter First Name" id="First" /><br>
+        <p id="First_error"  class="error" ></p>
+        <p id="First_success"  class="success" ></p>
+        <label for="Middle">Middle Name</label><br>
+        <input type="text" placeholder="Enter Middle Name" id="Middle" /><br>
+        <p id="Middle_error" class="error"></p>
+        <p id="Middle_success"  class="success" ></p>
+        <label for="Last">Last Name</label><br>
+        <input type="text" placeholder="Enter Last Name" id="Last" /><br>
+        <p id="Last_error" class="error"></p>
+        <p id="Last_success"  class="success" ></p>
+        <label for="Mobile">Mobile Number</label><br>
+        <input type="text" placeholder="Enter Mobile Number" id="Mobile" /><br>
+        <p id="Mobile_error" class="error"></p>
+        <p id="Mobile_success"  class="success" ></p>
+        <label for="Email">Email</label><br>
+        <input type="text" placeholder="Enter Email" id="Email" /><br>
+        <p id="Email_error" class="error"></p>
+        <p id="Email_success"  class="success" ></p>
+        <p>Please select your Gender:</p>
+        <input type="radio" id="Male" name="gender" value="Male">
+        <label for="Male">Male</label><br>
+        <input type="radio" id="Female" name="gender" value="Female">
+        <label for="Female">Female</label><br>
+        <input type="radio" id="Other" name="gender" value="Other">
+        <label for="Other">Other</label><br>
+        <p id="Gender_error" class="error"></p>
+        <p id="Gender_success"  class="success" ></p>
+        <p>Please select your Hobbies:</p>
+        <input type="checkbox" id="Travelling" name="hobbies" value="Travelling">
+        <label for="Travelling">Travelling</label><br>
+        <input type="checkbox" id="Reading" name="hobbies" value="Reading">
+        <label for="Reading">Reading</label><br>
+        <input type="checkbox" id="Cricket" name="hobbies" value="Cricket">
+        <label for="Cricket">Cricket</label>
+        <p id="Hobbies_error" class="error"></p>
+        <p id="Hobbies_success"  class="success" ></p><br><br>
+        <button type="button" onclick="validateForm()">Submit</button>
+      </form>
+    </div>
+  </div>
+  <p id="results"></p>
+  <script>
+    function validateForm() {
+      var firstName = document.getElementById("First").value.trim();
+      var middleName = document.getElementById("Middle").value.trim();
+      var lastName = document.getElementById("Last").value.trim();
+      var mobile = document.getElementById("Mobile").value.trim();
+      var email = document.getElementById("Email").value.trim();
+      var gender = document.querySelector('input[name="gender"]:checked');
+      var hobbies = document.querySelectorAll('input[name="hobbies"]:checked');
+
+      var isValid = true;
+      if(!firstName){
+        isValid = false;
+        setError("First", "First Name field is required.");
+      }
+      else if ( firstName.length > 15) {
+        isValid = false;
+        setError("First", "First Name must be between 1 and 15 characters.");
+      } else {
+        clearError("First");
+      }
+
+      if (middleName && middleName.length > 15) {
+        isValid = false;
+        setError("Middle", "Middle Name must be between 1 and 15 characters.");
+      } else {
+        clearError("Middle");
+      }
+      if(!lastName){
+        setError("Last", "Last Name field is required.");
+      } 
+      else if (lastName.length > 15) {
+        isValid = false;
+        setError("Last", "Last Name must be between 1 and 15 characters.");
+      } else {
+        clearError("Last");
+      }
+      if (!mobile) {
+        isValid = false;
+        setError("Mobile", "Mobile Number field is required.");
+      }
+      else if (mobile.length !== 10 || isNaN(mobile)) {
+        isValid = false;
+        setError("Mobile", "Mobile Number must be a 10-digit number.");
+      } else {
+        clearError("Mobile");
+      }
+      if (!email ) {
+        isValid = false;
+        setError("Email", " Email field is required");
+      }
+      else if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        isValid = false;
+        setError("Email", "Invalid email address,Example:name@gmail.com or name@solutions.cse");
+      } else {
+        clearError("Email");
+      }
+
+      if (!gender) {
+        isValid = false;
+        setError("Gender", "Please select a gender");
+      } else {
+        clearError("Gender");
+      }
+
+      if (hobbies.length === 0) {
+        isValid = false;
+        setError("Hobbies", "Please select at least one hobby");
+      } else {
+        clearError("Hobbies");
+      }
+
+      if (isValid) {
+        storeFormData();
+        document.getElementById("myForm").reset();
+      }
+      
+
+    }
+
+    function setError(id, message) {
+      var errorElement = document.getElementById(id + "_error");
+      errorElement.textContent = message;
+      errorElement.style.display = "block";
+      document.getElementById(id + "_success").textContent = "";
+    }
+
+function clearError(id) {
+  var element = document.getElementById(id);
+
+    document.getElementById(id + "_error").textContent = "";
+    if (id === "Hobbies" || id === "Gender") {
+      var checked = document.querySelector('input[name="' + id.toLowerCase() + '"]:checked');
+      if (checked) {
+        document.getElementById(id + '_success').textContent = `Successfully filled ${id.toLowerCase()}`;
+      } else {
+        document.getElementById(id + '_success').textContent = '';
+      }
+    } else if (element.value !== "") {
+      document.getElementById(id + '_success').textContent = `Successfully filled ${id}`;
+    } else {
+      document.getElementById(id + "_success").textContent = '';
+    }
+  
+}
+
+    function storeFormData() {
+      var formDataObj = {
+        First: document.getElementById("First").value.trim(),
+        Middle: document.getElementById("Middle").value.trim(),
+        Last: document.getElementById("Last").value.trim(),
+        Mobile: document.getElementById("Mobile").value.trim(),
+        Email: document.getElementById("Email").value.trim(),
+        Gender: document.querySelector('input[name="gender"]:checked').value,
+        Hobbies: Array.from(document.querySelectorAll('input[name="hobbies"]:checked')).map(hobby => hobby.value).join(", ")
+      };
+      saveFormData(formDataObj);
+      
+      console.log(formDataObj);
+      
+    }
+    function saveFormData(storData) {
+      var storedFormData = JSON.parse(localStorage.getItem('formData')) || [];
+      console.log(storedFormData,"storedFormData")
+      storedFormData.push(storData);
+      localStorage.setItem('formData', JSON.stringify(storedFormData));
+      let results = document.getElementById('results');
+      results.innerHTML = JSON.stringify(storedFormData); 
+      alert("Form data saved successfully!");
+    }
+  </script>
+</body>
+</html>
